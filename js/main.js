@@ -13,7 +13,7 @@ const isStringValid = (str, maxLength = 140) => str.length <= maxLength;
 
 isStringValid(test);
 
-const DESCRIPTION = [
+const DESCRIPTIONS = [
   'Это я с любимой бабушкой',
   'Наконец-то вырвался в отпуск',
   'Утро начинается не с кофе',
@@ -29,7 +29,7 @@ const DESCRIPTION = [
 const MIN_LIKE = 15;
 const MAX_LIKE = 200;
 
-const MESSAGE = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -50,16 +50,16 @@ const NAMES = [
 let customId = 0;
 const numberOfPhotoDescription = 25;
 
-const getRandomLike = () => getRandomPositiveInteger(MIN_LIKE, MAX_LIKE);
+const likesCount = () => getRandomPositiveInteger(MIN_LIKE, MAX_LIKE);
 
-function getRandomItem(array, count) {
+const getRandomItem = (array, count) => {
   for (let i = 0; i < count; i++) {
     let number = getRandomPositiveInteger(0, 500);
     let breakPoint = true;
     while (breakPoint) { breakPoint = array.includes(number) ? number = getRandomPositiveInteger(0, 500) : false; }
     array[i] = number;
   }  return array;
-}
+};
 
 const authorId = [];
 const uniqueItem = getRandomItem(authorId, 500);
@@ -67,26 +67,24 @@ const uniqueItem = getRandomItem(authorId, 500);
 const createPhotoDescription = () => {
   customId += 1;
   const photoUrl = `photos/${customId}.jpg`;
-  const randomDescription = getRandomPositiveInteger(0, DESCRIPTION.length - 1);
-  const randomLike = getRandomLike();
-  const randomMessage = getRandomPositiveInteger(0, MESSAGE.length - 1);
+  const randomDescription = getRandomPositiveInteger(0, DESCRIPTIONS.length - 1);
+  const randomLike = likesCount();
+  const randomMessage = getRandomPositiveInteger(0, MESSAGES.length - 1);
   const randomName = getRandomPositiveInteger(0, NAMES.length - 1);
   const author = {
     id: uniqueItem.splice(0, 1)[0],
     avatar: `img/avatar-${getRandomPositiveInteger(1,6)}.svg`,
-    message: MESSAGE[randomMessage],
+    message: MESSAGES[randomMessage],
     name: NAMES[randomName],
   };
 
   return {
     id: customId,
     url: photoUrl,
-    description: DESCRIPTION[randomDescription],
+    description: DESCRIPTIONS[randomDescription],
     like: randomLike,
     comments: author,
   };
 };
 
 const photoDescription = Array.from({length: numberOfPhotoDescription}, createPhotoDescription);
-
-console.log(photoDescription);
