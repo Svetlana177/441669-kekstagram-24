@@ -1,5 +1,5 @@
-function checkStringLength (string, length) {
+const checkStringLength = (string, length) => {
   return string.length <= length;
-}
+};
 
 checkStringLength();
