@@ -1,5 +1,3 @@
-const checkStringLength = (string, length) => {
-  return string.length <= length;
-};
+const checkStringValid = (str, maxLength = 140) => str.length <= maxLength;
 
-checkStringLength();
+checkStringValid();
