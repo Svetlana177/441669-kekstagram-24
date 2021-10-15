@@ -1,4 +1,4 @@
-import { getRandomPositiveInteger } from './utils/get-random-positive-integer';
+import { getRandomPositiveInteger } from './utils/get-random-positive-integer.js';
 
 const DESCRIPTIONS = [
   'Это я с любимой бабушкой',
@@ -35,7 +35,7 @@ const NAMES = [
 ];
 
 let customId = 0;
-const NUMBEROFDASCRIPTION = 25;
+const DESCRIPTIONSCOUNT = 25;
 
 const likesCount = () => getRandomPositiveInteger(MIN_LIKE, MAX_LIKE);
 
@@ -74,4 +74,6 @@ const createPhotoDescription = () => {
   };
 };
 
-export { NUMBEROFDASCRIPTION, createPhotoDescription };
+const photoDescription = () => Array.from({length: DESCRIPTIONSCOUNT}, createPhotoDescription);
+
+export { photoDescription };
