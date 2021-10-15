@@ -66,6 +66,14 @@ const createComment = () => {
     name: NAMES[randomName],
   };
 };
+//генерация комментов
+const createAllComments = () => {
+  const comments = [];
+  for (let i = 0; i < MESSAGES.length; i++ ) {
+    comments[i] = createComment();
+  }
+  return comments;
+};
 
 const createPhotoDescription = () => {
   customId += 1;
@@ -78,7 +86,7 @@ const createPhotoDescription = () => {
     url: photoUrl,
     description: DESCRIPTIONS[randomDescription],
     like: randomLike,
-    comments: Array.from({length: getRandomPositiveInteger(1, 6)}, createComment),
+    comments: createAllComments(),
   };
 };
 
