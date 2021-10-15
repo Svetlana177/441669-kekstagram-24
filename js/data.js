@@ -1,4 +1,4 @@
-import { getRandomPositiveInteger } from './utils/get-random-positive-integer.js';
+import {getRandomPositiveInteger} from './utils/get-random-positive-integer.js';
 
 const DESCRIPTIONS = [
   'Это я с любимой бабушкой',
@@ -43,37 +43,52 @@ const getRandomItem = (array, count) => {
   for (let i = 0; i < count; i++) {
     let number = getRandomPositiveInteger(0, 500);
     let breakPoint = true;
-    while (breakPoint) { breakPoint = array.includes(number) ? number = getRandomPositiveInteger(0, 500) : false; }
+    while (breakPoint) {
+      breakPoint = array.includes(number) ? number = getRandomPositiveInteger(0, 500) : false;
+    }
     array[i] = number;
-  }  return array;
+  }
+  return array;
 };
 
 const authorId = [];
 const uniqueItem = getRandomItem(authorId, 500);
+
+/*const createCommentary = () => ({
+  id: uniqueRandomNumber(),
+  avatar: `img/avatar-${getRandomNumber(1, NUMBER_OF_AVATARS)}.svg`,
+  message: getRandomArrayElement(MESSAGES),
+  name: getRandomArrayElement(NAMES),
+});*/
+
+//// Функция создаёт один объект с комментарием пользователя
+const createComment = () => {
+  const randomMessage = getRandomPositiveInteger(0, MESSAGES.length - 1);
+  const randomName = getRandomPositiveInteger(0, NAMES.length - 1);
+
+  return {
+    id: uniqueItem.splice(0, 1)[0],
+    avatar: `img/avatar-${getRandomPositiveInteger(1, 6)}.svg`,
+    message: MESSAGES[randomMessage],
+    name: NAMES[randomName],
+  };
+};
 
 const createPhotoDescription = () => {
   customId += 1;
   const photoUrl = `photos/${customId}.jpg`;
   const randomDescription = getRandomPositiveInteger(0, DESCRIPTIONS.length - 1);
   const randomLike = likesCount();
-  const randomMessage = getRandomPositiveInteger(0, MESSAGES.length - 1);
-  const randomName = getRandomPositiveInteger(0, NAMES.length - 1);
-  const author = {
-    id: uniqueItem.splice(0, 1)[0],
-    avatar: `img/avatar-${getRandomPositiveInteger(1,6)}.svg`,
-    message: MESSAGES[randomMessage],
-    name: NAMES[randomName],
-  };
 
   return {
     id: customId,
     url: photoUrl,
     description: DESCRIPTIONS[randomDescription],
     like: randomLike,
-    comments: author,
+    comments: Array.from({length: getRandomPositiveInteger(1, 5)}, createComment),
   };
 };
 
 const photoDescription = () => Array.from({length: DESCRIPTIONSCOUNT}, createPhotoDescription);
 
-export { photoDescription };
+export {photoDescription};
