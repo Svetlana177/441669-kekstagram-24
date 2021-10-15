@@ -54,13 +54,6 @@ const getRandomItem = (array, count) => {
 const authorId = [];
 const uniqueItem = getRandomItem(authorId, 500);
 
-/*const createCommentary = () => ({
-  id: uniqueRandomNumber(),
-  avatar: `img/avatar-${getRandomNumber(1, NUMBER_OF_AVATARS)}.svg`,
-  message: getRandomArrayElement(MESSAGES),
-  name: getRandomArrayElement(NAMES),
-});*/
-
 //// Функция создаёт один объект с комментарием пользователя
 const createComment = () => {
   const randomMessage = getRandomPositiveInteger(0, MESSAGES.length - 1);
@@ -85,7 +78,7 @@ const createPhotoDescription = () => {
     url: photoUrl,
     description: DESCRIPTIONS[randomDescription],
     like: randomLike,
-    comments: Array.from({length: getRandomPositiveInteger(1, 5)}, createComment),
+    comments: Array.from({length: getRandomPositiveInteger(1, 6)}, createComment),
   };
 };
 
