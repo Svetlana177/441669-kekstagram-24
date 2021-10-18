@@ -36,40 +36,62 @@ const NAMES = [
 
 let customId = 0;
 const DESCRIPTIONSCOUNT = 25;
+const IDNUMBER = 100;
+const TWOSENTENCESINONECOMMENT = 2;
 
 const likesCount = () => getRandomPositiveInteger(MIN_LIKE, MAX_LIKE);
 
-const getRandomItem = (array, count) => {
-  for (let i = 0; i < count; i++) {
-    let number = getRandomPositiveInteger(0, 500);
-    let breakPoint = true;
-    while (breakPoint) {
-      breakPoint = array.includes(number) ? number = getRandomPositiveInteger(0, 500) : false;
+//Функция проверки на уникальность
+const getUniqueElement = (array, elem) => {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] === elem) {
+      return false;
     }
-    array[i] = number;
   }
-  return array;
+  return true;
 };
 
-const authorId = [];
-const uniqueItem = getRandomItem(authorId, 500);
+//уникальный ID комментария
+const createUniqueId = (arrayId) => {
+  for (let i = 0; i < IDNUMBER; i++) {
+    let currentId = getRandomPositiveInteger(0, IDNUMBER);
+    while (!getUniqueElement(arrayId, currentId)) {
+      currentId = getRandomPositiveInteger(0, IDNUMBER);
+    }
+    arrayId.push(currentId);
+  }
+  return arrayId;
+};
+
+const index = [];
+createUniqueId(index);
 
 //// Функция создаёт один объект с комментарием пользователя
 const createComment = () => {
-  const randomMessage = getRandomPositiveInteger(0, MESSAGES.length - 1);
   const randomName = getRandomPositiveInteger(0, NAMES.length - 1);
 
+  const phrase = [];
+  for (let i = 0; i < MESSAGES.length; i++) {
+    for (let j = 0; j < TWOSENTENCESINONECOMMENT; j++) {
+      let currentMessage = MESSAGES[getRandomPositiveInteger(0, MESSAGES.length - 1)];
+      while (!getUniqueElement(phrase, currentMessage)) {
+        currentMessage = MESSAGES[getRandomPositiveInteger(0, MESSAGES.length - 1)];
+      }
+      phrase[j] = currentMessage;
+    }
+  }
   return {
-    id: uniqueItem.splice(0, 1)[0],
+    id: Number(index.splice(0, 1)),
     avatar: `img/avatar-${getRandomPositiveInteger(1, 6)}.svg`,
-    message: MESSAGES[randomMessage],
+    message: `${phrase[0]} ${phrase[1]}`,
     name: NAMES[randomName],
   };
 };
+
 //генерация комментов
 const createAllComments = () => {
   const comments = [];
-  for (let i = 0; i < MESSAGES.length; i++ ) {
+  for (let i = 0; i < getRandomPositiveInteger(1, 6); i++) {
     comments[i] = createComment();
   }
   return comments;
