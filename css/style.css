@@ -709,7 +709,9 @@ main {
 
   border-radius: 5px;
 }
-
+.validation__error {
+  border-color: #ff0000;
+}
 
 /**
  * Кнопка для отправки изображения
