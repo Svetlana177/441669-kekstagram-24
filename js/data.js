@@ -1,4 +1,4 @@
-import {getRandomPositiveInteger} from './utils/get-random-positive-integer.js';
+import { getRandomPositiveInteger } from './utils/get-random-positive-integer.js';
 
 const DESCRIPTIONS = [
   'Это я с любимой бабушкой',
@@ -114,4 +114,4 @@ const createPhotoDescription = () => {
 
 const photoDescription = () => Array.from({length: DESCRIPTIONSCOUNT}, createPhotoDescription);
 
-export {photoDescription, createAllComments, createPhotoDescription};
+export { photoDescription, createAllComments };
