@@ -1,5 +1,4 @@
 import './data.js';
-import {createAllComments} from './data.js';
 import {userPictureItem} from './picture.js';
 import {isEscapeKey} from './utils/is-escape-key.js';
 
@@ -17,17 +16,14 @@ const commentsLoader = document.querySelector('.comments-loader');
 const bigPictureCancel = document.querySelector('.big-picture__cancel');
 
 const socialCommentFragment = document.createDocumentFragment();
-const socialCommentItem = createAllComments();
 
-const createComment = () => {
+const fillComments = (item) => {
   socialComments.innerHTML = '';
-  socialCommentItem.forEach(({avatar, name, message}) => {
+  item.forEach(({avatar, name, message}) => {
     const commentElement = socialComment.cloneNode(true);
-
     commentElement.querySelector('.social__picture').src = avatar;
     commentElement.querySelector('.social__picture').alt = name;
     commentElement.querySelector('.social__text').textContent = message;
-
     socialCommentFragment.appendChild(commentElement);
   });
 
@@ -35,41 +31,44 @@ const createComment = () => {
   return socialComments;
 };
 
-const closeSection = () => {
-  bigPicture.classList.add('hidden');
-  commentsLoader.classList.remove('hidden');
-  bodyTag.classList.remove('modal-open');
-};
-
-const onEscapeKey = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeSection();
-  }
-};
-
-const closeBigPicture = () => {
-  //добавление обработчика
-  document.addEventListener('keydown', onEscapeKey);
-
-  //удаление обработчика
-  bigPictureCancel.addEventListener('click', () => {
-    closeSection();
-    document.removeEventListener('keydown', onEscapeKey);
-  });
-};
-
 const openBigPicture = (pictureId) => {
   img.src = userPictureItem[pictureId].url;
   likes.textContent = userPictureItem[pictureId].like.toString();
   commentsCount.textContent = userPictureItem[pictureId].comments.toString();
   description.textContent = userPictureItem[pictureId].description;
-  createComment();
+  fillComments(userPictureItem[pictureId].comments);
   bigPicture.classList.remove('hidden');
   socialCommentCount.classList.add('hidden');
   commentsLoader.classList.add('hidden');
   bodyTag.classList.add('.modal-open');
-  closeBigPicture();
 };
+
+const closeBigPicture = () => {
+  bigPicture.classList.add('hidden');
+  bodyTag.classList.remove('modal-open');
+  socialCommentCount.classList.remove('hidden');
+  commentsLoader.classList.remove('hidden');
+  //Удаление обработчика
+  document.removeEventListener('keydown', onEscapeKey);
+  bigPictureCancel.removeEventListener('click', () => closeBigPicture);
+};
+
+bigPictureCancel.addEventListener('click', () => closeBigPicture());
+
+//если сделать стрелочной функцией, то орет линтер
+function onEscapeKey (evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeBigPicture();
+  }
+}
+
+//без этого не работает ESCAPE
+document.addEventListener('keydown', (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeBigPicture();
+  }
+});
 
 export { openBigPicture };
