@@ -1,5 +1,6 @@
 import {photoDescription} from './data.js';
-import {openBigPicture} from './big-picture.js';
+import {fillBigPicture} from './big-picture.js';
+import {isEnterKey} from './utils/is-enter-key.js';
 
 //Контейнер для изображений от других пользователей
 const pictureBlock = document.querySelector('.pictures');
@@ -17,9 +18,14 @@ userPictureItem.forEach(({id, url, like, comments}) => {
   pictureElement.querySelector('.picture__likes').textContent = like.toString();
   pictureElement.querySelector('.picture__comments').textContent = comments.length.toString();
   pictureListFragment.appendChild(pictureElement);
-  //нужно ли удалять этот обработчик потом и если да то как
+
   pictureElement.addEventListener('click', () => {
-    openBigPicture(id - arrayCorrectionPoint);
+    fillBigPicture(id - arrayCorrectionPoint);
+  });
+  pictureElement.addEventListener('keydown', (evt) => {
+    if (isEnterKey(evt)) {
+      fillBigPicture(id - arrayCorrectionPoint);
+    }
   });
 });
 
