@@ -1,7 +1,6 @@
 import './data.js';
 import {userPictureItem} from './picture.js';
-import {isEscapeKey} from './utils/is-escape-key.js';
-import {isEnterKey} from './utils/is-enter-key.js';
+import {isEnterKey, isEscapeKey} from './utils/is-key-values.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const bodyTag = document.querySelector('body');
@@ -40,18 +39,6 @@ const fillBigPicture = (pictureId) => {
   openBigPicture();
 };
 
-/*
-const closeBigPicture = () => {
-  bigPicture.classList.add('hidden');
-  bodyTag.classList.remove('modal-open');
-  socialCommentCount.classList.remove('hidden');
-  commentsLoader.classList.remove('hidden');
-  Удаление обработчика
-  document.removeEventListener('keydown', onEscapeKey);
-bigPictureCancel.removeEventListener('click', () => closeBigPicture);
-};
-*/
-
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -64,7 +51,7 @@ const clearSocialComments = () => {
   socialComments.innerHTML = '';
 };
 
-function openBigPicture () {
+function openBigPicture() {
   bigPicture.classList.remove('hidden');
   socialCommentCount.classList.add('hidden');
   commentsLoader.classList.add('hidden');
@@ -73,7 +60,7 @@ function openBigPicture () {
   document.addEventListener('keydown', onPopupEscKeydown);
 }
 
-function closeBigPicture () {
+function closeBigPicture() {
   bigPicture.classList.add('hidden');
   socialCommentCount.classList.remove('hidden');
   commentsLoader.classList.remove('hidden');
@@ -93,4 +80,4 @@ bigPictureClose.addEventListener('keydown', (evt) => {
   }
 });
 
-export { fillBigPicture };
+export {fillBigPicture};

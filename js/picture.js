@@ -1,6 +1,6 @@
 import {photoDescription} from './data.js';
 import {fillBigPicture} from './big-picture.js';
-import {isEnterKey} from './utils/is-enter-key.js';
+import {isEnterKey} from './utils/is-key-values.js';
 
 //Контейнер для изображений от других пользователей
 const pictureBlock = document.querySelector('.pictures');
