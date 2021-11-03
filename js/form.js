@@ -28,7 +28,8 @@ function openUserModal() {
 const clearForm = () => {
   userModalElement.value = '';
   //консоль выдает ошибку Uncaught TypeError: Cannot read properties of null (reading 'reset')
-  document.getElementById(' upload-file').reset();
+  //Можно ли заменить на   document.getElementById('upload-file').value = '';   ?
+  document.getElementById('upload-file').value();
 };
 
 function closeUserModal() {
@@ -47,14 +48,11 @@ userModalCloseButton.addEventListener('click', () => {
   closeUserModal();
 });
 
-
 const textHashtag = document.querySelector('.text__hashtags');
-//console.log(textHashtag);
-const MIN_HASHTAG_LENGTH = 2;
-const MAX_HASHTAG_LENGTH = 20;
 const MAX_HASHTAG_COUNT = 5;
-const MAX_COMMENT_LENGTH = 5;
-const regularValue = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+const MAX_COMMENT_LENGTH = 140;
+const regularValue = /^#[A-Za-zА-Яа-яЁё0-9#]{1,19}$|(^$)/;
+const symbols = /^#\S*#\S*/;
 
 // отмена обработчика Esc при фокусе
 textHashtag.addEventListener('keydown', (evt) => {
@@ -68,38 +66,29 @@ textDescription.addEventListener('keydown', (evt) => {
 });
 
 textHashtag.addEventListener('input', () => {
-  const hashtagText = textHashtag.value;
-  //console.log(hashtagText);
+  const hashtagText = textHashtag.value.toLowerCase();
   const hashtagMass = hashtagText.split(' ');
-  //console.log('bin', hashtagMass[i].length);
-
+  const tempHashtagMass = [];
+  textHashtag.setCustomValidity('');
+  textHashtag.classList.remove('validation__error');
   for (let i = 0; i < hashtagMass.length; i++) {
-    // console.log(hashtagMass[i].length);
-    //let hashtagTextToLowerCase = hashtagMass[i].toLowerCase();
-    if (hashtagMass === '#') {
+    if (hashtagMass[i] === '#') {
       textHashtag.setCustomValidity('Хэш-тег не может состоять только из одной решётки.');
       textHashtag.classList.add('validation__error');
-    }
-    if (hashtagMass[i].length < MIN_HASHTAG_LENGTH) {
-      textHashtag.setCustomValidity('Введите не менее 2двух символов');
+    } else if (!regularValue.test(hashtagMass[i])) {
+      textHashtag.setCustomValidity('Строка после решётки должна состоять из 20 букв и чисел, включая хештег и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;');
       textHashtag.classList.add('validation__error');
-    }
-    if (hashtagMass[i].length > MAX_HASHTAG_LENGTH) {
-      textHashtag.setCustomValidity('Введите не более 20 символов');
+    } else if (symbols.test(hashtagMass[i])) {
+      textHashtag.setCustomValidity('Хэш-теги должны разделяться пробелами.');
       textHashtag.classList.add('validation__error');
-      //console.log(hashtagMass[i]);
-    }
-    if (hashtagMass.length > MAX_HASHTAG_COUNT) {
+    } else if (hashtagMass.length > MAX_HASHTAG_COUNT) {
       textHashtag.setCustomValidity('Нельзя указать больше 5 хэш-тегов');
       textHashtag.classList.add('validation__error');
-    }
-    if (regularValue.test(textHashtag)) {
-      textHashtag.setCustomValidity('строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;');
+    } else if (tempHashtagMass.includes(hashtagMass[i])) {
+      textHashtag.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
       textHashtag.classList.add('validation__error');
     } else {
-      //сбросить значение поля, если это значение стало корректно.
-      textHashtag.setCustomValidity('');
-      textHashtag.classList.remove('validation__error');
+      tempHashtagMass.push(hashtagMass[i]);
     }
     // проверять валидность поля на каждый ввод символа
     textHashtag.reportValidity();
