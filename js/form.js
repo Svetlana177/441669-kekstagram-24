@@ -16,10 +16,12 @@ const onPopupEscKeydown = (evt) => {
 };
 
 function openUserModal() {
-  imgUploadOverlay.classList.remove('hidden');
-  body.classList.add('modal-open');
+  userModalElement.addEventListener('change', () => {
+    imgUploadOverlay.classList.remove('hidden');
+    body.classList.add('modal-open');
 
-  document.addEventListener('keydown', (onPopupEscKeydown));
+    document.addEventListener('keydown', (onPopupEscKeydown));
+  });
 }
 
 //чистим форму
@@ -110,7 +112,7 @@ textDescription.addEventListener('input', () => {
     textDescription.setCustomValidity('');
     textDescription.classList.add('validation__error');
     textDescription.setCustomValidity(`Длина комментария не может составлять больше 140 символов. Лишних символов: ${textDescription.value.length - MAX_COMMENT_LENGTH}.`);
-  }  else {
+  } else {
     textDescription.setCustomValidity('');
     textDescription.classList.remove('validation__error');
   }
