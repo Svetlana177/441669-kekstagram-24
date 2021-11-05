@@ -29,7 +29,7 @@ const clearForm = () => {
   userModalElement.value = '';
   //консоль выдает ошибку Uncaught TypeError: Cannot read properties of null (reading 'reset')
   //Можно ли заменить на   document.getElementById('upload-file').value = '';   ?
-  document.getElementById('upload-file').value();
+  document.querySelector('.img-upload__form').reset();
 };
 
 function closeUserModal() {

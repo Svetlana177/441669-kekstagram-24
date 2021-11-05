@@ -91,7 +91,7 @@ const createComment = () => {
 //генерация комментов
 const createAllComments = () => {
   const comments = [];
-  for (let i = 0; i < getRandomPositiveInteger(1, 6); i++) {
+  for (let i = 0; i < getRandomPositiveInteger(1, 25); i++) {
     comments[i] = createComment();
   }
   return comments;
