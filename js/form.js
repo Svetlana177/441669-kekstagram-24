@@ -46,6 +46,16 @@ userModalCloseButton.addEventListener('click', () => {
   closeUserModal();
 });
 
+//Так удалять обработчики?
+userModalElement.removeEventListener('click', () => {
+  openUserModal();
+});
+
+userModalCloseButton.removeEventListener('click', () => {
+  closeUserModal();
+});
+
+
 const textHashtag = document.querySelector('.text__hashtags');
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
