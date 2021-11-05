@@ -30,7 +30,13 @@ const fillComments = (item) => {
   return socialComments;
 };
 
+//чистим комменты
+const clearSocialComments = () => {
+  socialComments.innerHTML = '';
+};
+
 const fillBigPicture = (pictureId) => {
+  clearSocialComments();
   img.src = userPictureItem[pictureId].url;
   likes.textContent = userPictureItem[pictureId].like.toString();
   commentsCount.textContent = userPictureItem[pictureId].comments.toString();
@@ -44,11 +50,6 @@ const onPopupEscKeydown = (evt) => {
     evt.preventDefault();
     closeBigPicture();
   }
-};
-
-//чистим комменты
-const clearSocialComments = () => {
-  socialComments.innerHTML = '';
 };
 
 function openBigPicture() {
