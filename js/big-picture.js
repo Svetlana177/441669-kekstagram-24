@@ -14,8 +14,14 @@ const description = document.querySelector('.social__caption');
 const socialCommentCount = document.querySelector('.social__comment-count');
 const commentsLoader = document.querySelector('.comments-loader');
 const bigPictureClose = document.querySelector('.big-picture__cancel');
-
+const MAXCOMMENTS = 5;
 const socialCommentFragment = document.createDocumentFragment();
+let commentsArr = [];
+
+//чистим комменты
+const clearSocialComments = () => {
+  socialComments.innerHTML = '';
+};
 
 const fillComments = (item) => {
   item.forEach(({avatar, name, message}) => {
@@ -25,23 +31,44 @@ const fillComments = (item) => {
     commentElement.querySelector('.social__text').textContent = message;
     socialCommentFragment.appendChild(commentElement);
   });
-
   socialComments.appendChild(socialCommentFragment);
   return socialComments;
 };
 
-//чистим комменты
-const clearSocialComments = () => {
-  socialComments.innerHTML = '';
+const firstFiveComments = () => {
+  const totalComments = commentsArr.length;
+  const commentsPart = commentsArr.slice(0, 5);
+  fillComments(commentsPart);
+  commentsLoader.classList.remove('hidden');
+  socialCommentCount.firstChild.textContent = `${MAXCOMMENTS} из `;
+  if (totalComments <= MAXCOMMENTS) {
+    commentsLoader.classList.add('hidden');
+    socialCommentCount.firstChild.textContent = `${totalComments} из `;
+  }
+};
+
+const showFiveComments = () => {
+
+  let plusFive = socialComments.children.length + MAXCOMMENTS;
+  const commentsPart = commentsArr.slice(socialComments.children.length, plusFive);
+  fillComments(commentsPart);
+  if (plusFive >= commentsArr.length) {
+    plusFive = commentsArr.length;
+    commentsLoader.classList.add('hidden');
+    socialCommentCount.firstChild.textContent = `${plusFive} из `;
+  }
+  socialCommentCount.children.textContent = `${plusFive} из `;
 };
 
 const fillBigPicture = (pictureId) => {
   clearSocialComments();
+  commentsArr = userPictureItem[pictureId].comments;
   img.src = userPictureItem[pictureId].url;
   likes.textContent = userPictureItem[pictureId].like.toString();
-  commentsCount.textContent = userPictureItem[pictureId].comments.toString();
+  commentsCount.textContent = userPictureItem[pictureId].comments.length.toString();
   description.textContent = userPictureItem[pictureId].description;
-  fillComments(userPictureItem[pictureId].comments);
+  commentsLoader.addEventListener('click', showFiveComments);
+  firstFiveComments();
   openBigPicture();
 };
 
