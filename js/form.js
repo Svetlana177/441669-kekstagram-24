@@ -89,7 +89,7 @@ function openUserModal() {
 
     document.addEventListener('keydown', onPopupEscKeydown);
     textHashtag.addEventListener('keydown', checkEscapeKey);
-    textDescription.addEventListener('keydown', checkEscapeKey);
+    textDescription.addEventListener('keydown', stopEvent);
     textHashtag.addEventListener('input', checkTextHashtags);
     textDescription.addEventListener('input', checkComments);
   });
@@ -102,7 +102,7 @@ function closeUserModal() {
 
   document.removeEventListener('keydown', onPopupEscKeydown);
   textHashtag.removeEventListener('keydown', checkEscapeKey);
-  textDescription.removeEventListener('keydown', checkEscapeKey);
+  textDescription.removeEventListener('keydown', stopEvent);
 
   textHashtag.removeEventListener('input', checkTextHashtags);
   textDescription.removeEventListener('input', checkComments);
