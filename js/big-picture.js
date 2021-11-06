@@ -87,10 +87,7 @@ const checkEnterKey = (evt) => {
 
 function openBigPicture() {
   bigPicture.classList.remove('hidden');
-  socialCommentCount.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
   bodyTag.classList.add('.modal-open');
-
   document.addEventListener('keydown', onPopupEscKeydown);
   bigPictureClose.addEventListener('click', closeBigPicture);
   bigPictureClose.addEventListener('keydown', checkEnterKey);
@@ -98,8 +95,6 @@ function openBigPicture() {
 
 function closeBigPicture() {
   bigPicture.classList.add('hidden');
-  socialCommentCount.classList.remove('hidden');
-  commentsLoader.classList.remove('hidden');
   bodyTag.classList.remove('.modal-open');
   clearSocialComments();
 
