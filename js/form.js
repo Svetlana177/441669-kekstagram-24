@@ -21,14 +21,14 @@ const onPopupEscKeydown = (evt) => {
 };
 
 // запрет на закрытие по Esc при фокусе
-const checkEscapeKey = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.stopPropagation();
-  }
+const stopEvent = (evt) => {
+  evt.stopPropagation();
 };
 
-const checkStopEvent = (evt) => {
-  evt.stopPropagation();
+const checkEscapeKey = (evt) => {
+  if (isEscapeKey(evt)) {
+    stopEvent();
+  }
 };
 
 //чистим форму
@@ -87,7 +87,7 @@ function openUserModal() {
     imgUploadOverlay.classList.remove('hidden');
     body.classList.add('modal-open');
 
-    document.addEventListener('keydown', (onPopupEscKeydown));
+    document.addEventListener('keydown', onPopupEscKeydown);
     textHashtag.addEventListener('keydown', checkEscapeKey);
     textDescription.addEventListener('keydown', checkStopEvent);
     textHashtag.addEventListener('input', checkTextHashtags);
