@@ -5,8 +5,13 @@ const userModalElement = document.querySelector('#upload-file');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const body = document.querySelector('body');
 const textDescription = document.querySelector('.text__description');
-
 const userModalCloseButton = document.querySelector('#upload-cancel');
+
+const textHashtag = document.querySelector('.text__hashtags');
+const MAX_HASHTAG_COUNT = 5;
+const MAX_COMMENT_LENGTH = 140;
+const regularValue = /^#[A-Za-zА-Яа-яЁё0-9#]{1,19}$|(^$)/;
+const symbols = /^#\S*#\S*/;
 
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -15,65 +20,25 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
-function openUserModal() {
-  userModalElement.addEventListener('change', () => {
-    imgUploadOverlay.classList.remove('hidden');
-    body.classList.add('modal-open');
+// запрет на закрытие по Esc при фокусе
+const checkEscapeKey = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.stopPropagation();
+  }
+};
 
-    document.addEventListener('keydown', (onPopupEscKeydown));
-  });
-}
+const checkStopEvent = (evt) => {
+  evt.stopPropagation();
+};
 
 //чистим форму
 const clearForm = () => {
   userModalElement.value = '';
   document.querySelector('.img-upload__form').reset();
+  textHashtag.classList.remove('validation__error');
 };
 
-function closeUserModal() {
-  imgUploadOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-  clearForm();
-
-  document.removeEventListener('keydown', (onPopupEscKeydown));
-}
-
-userModalElement.addEventListener('click', () => {
-  openUserModal();
-});
-
-userModalCloseButton.addEventListener('click', () => {
-  closeUserModal();
-});
-
-//Так удалять обработчики?
-userModalElement.removeEventListener('click', () => {
-  openUserModal();
-});
-
-userModalCloseButton.removeEventListener('click', () => {
-  closeUserModal();
-});
-
-
-const textHashtag = document.querySelector('.text__hashtags');
-const MAX_HASHTAG_COUNT = 5;
-const MAX_COMMENT_LENGTH = 140;
-const regularValue = /^#[A-Za-zА-Яа-яЁё0-9#]{1,19}$|(^$)/;
-const symbols = /^#\S*#\S*/;
-
-// отмена обработчика Esc при фокусе
-textHashtag.addEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.stopPropagation();
-  }
-});
-
-textDescription.addEventListener('keydown', (evt) => {
-  evt.stopPropagation();
-});
-
-textHashtag.addEventListener('input', () => {
+const checkTextHashtags = () => {
   const hashtagText = textHashtag.value.toLowerCase();
   const hashtagMass = hashtagText.split(' ');
   const tempHashtagMass = [];
@@ -101,9 +66,10 @@ textHashtag.addEventListener('input', () => {
     // проверять валидность поля на каждый ввод символа
     textHashtag.reportValidity();
   }
-});
+};
 
-textDescription.addEventListener('input', () => {
+
+const checkComments = () => {
   const commentLength = checkStringLength(textDescription.value, MAX_COMMENT_LENGTH);
   if (!commentLength) {
     textDescription.setCustomValidity('');
@@ -114,15 +80,33 @@ textDescription.addEventListener('input', () => {
     textDescription.classList.remove('validation__error');
   }
   textDescription.reportValidity();
-});
+};
 
-textHashtag.removeEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.stopPropagation();
-  }
-});
+function openUserModal() {
+  userModalElement.addEventListener('change', () => {
+    imgUploadOverlay.classList.remove('hidden');
+    body.classList.add('modal-open');
 
-textDescription.removeEventListener('keydown', (evt) => {
-  evt.stopPropagation();
-});
+    document.addEventListener('keydown', (onPopupEscKeydown));
+    textHashtag.addEventListener('keydown', checkEscapeKey);
+    textDescription.addEventListener('keydown', checkStopEvent);
+    textHashtag.addEventListener('input', checkTextHashtags);
+    textDescription.addEventListener('input', checkComments);
+  });
+}
 
+function closeUserModal() {
+  imgUploadOverlay.classList.add('hidden');
+  body.classList.remove('modal-open');
+  clearForm();
+
+  document.removeEventListener('keydown', onPopupEscKeydown);
+  textHashtag.removeEventListener('keydown', checkEscapeKey);
+  textDescription.removeEventListener('keydown', checkStopEvent);
+
+  textHashtag.removeEventListener('input', checkTextHashtags);
+  textDescription.removeEventListener('input', checkComments);
+}
+
+userModalElement.addEventListener('click', openUserModal);
+userModalCloseButton.addEventListener('click', closeUserModal);
