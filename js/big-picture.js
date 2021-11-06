@@ -30,7 +30,13 @@ const fillComments = (item) => {
   return socialComments;
 };
 
+//чистим комменты
+const clearSocialComments = () => {
+  socialComments.innerHTML = '';
+};
+
 const fillBigPicture = (pictureId) => {
+  clearSocialComments();
   img.src = userPictureItem[pictureId].url;
   likes.textContent = userPictureItem[pictureId].like.toString();
   commentsCount.textContent = userPictureItem[pictureId].comments.toString();
@@ -46,9 +52,10 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
-//чистим комменты
-const clearSocialComments = () => {
-  socialComments.innerHTML = '';
+const checkEnterKey = (evt) => {
+  if (isEnterKey(evt)) {
+    closeBigPicture();
+  }
 };
 
 function openBigPicture() {
@@ -58,6 +65,8 @@ function openBigPicture() {
   bodyTag.classList.add('.modal-open');
 
   document.addEventListener('keydown', onPopupEscKeydown);
+  bigPictureClose.addEventListener('click', closeBigPicture);
+  bigPictureClose.addEventListener('keydown', checkEnterKey);
 }
 
 function closeBigPicture() {
@@ -68,16 +77,8 @@ function closeBigPicture() {
   clearSocialComments();
 
   document.removeEventListener('keydown', onPopupEscKeydown);
+  bigPictureClose.removeEventListener('click', closeBigPicture);
+  bigPictureClose.removeEventListener('keydown', checkEnterKey);
 }
-
-bigPictureClose.addEventListener('click', () => {
-  closeBigPicture();
-});
-
-bigPictureClose.addEventListener('keydown', (evt) => {
-  if (isEnterKey(evt)) {
-    closeBigPicture();
-  }
-});
 
 export {fillBigPicture};
