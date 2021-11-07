@@ -25,12 +25,6 @@ const stopEvent = (evt) => {
   evt.stopPropagation();
 };
 
-const checkEscapeKey = (evt) => {
-  if (isEscapeKey(evt)) {
-    stopEvent();
-  }
-};
-
 //чистим форму
 const clearForm = () => {
   userModalElement.value = '';
@@ -88,7 +82,7 @@ function openUserModal() {
     body.classList.add('modal-open');
 
     document.addEventListener('keydown', onPopupEscKeydown);
-    textHashtag.addEventListener('keydown', checkEscapeKey);
+    textHashtag.addEventListener('keydown', stopEvent);
     textDescription.addEventListener('keydown', stopEvent);
     textHashtag.addEventListener('input', checkTextHashtags);
     textDescription.addEventListener('input', checkComments);
@@ -101,7 +95,7 @@ function closeUserModal() {
   clearForm();
 
   document.removeEventListener('keydown', onPopupEscKeydown);
-  textHashtag.removeEventListener('keydown', checkEscapeKey);
+  textHashtag.removeEventListener('keydown', stopEvent);
   textDescription.removeEventListener('keydown', stopEvent);
 
   textHashtag.removeEventListener('input', checkTextHashtags);
