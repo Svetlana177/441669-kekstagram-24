@@ -48,7 +48,6 @@ const firstFiveComments = () => {
 };
 
 const showFiveComments = () => {
-
   let plusFive = socialComments.children.length + MAXCOMMENTS;
   const commentsPart = commentsArr.slice(socialComments.children.length, plusFive);
   fillComments(commentsPart);
@@ -67,7 +66,6 @@ const fillBigPicture = (pictureId) => {
   likes.textContent = userPictureItem[pictureId].like.toString();
   commentsCount.textContent = userPictureItem[pictureId].comments.length.toString();
   description.textContent = userPictureItem[pictureId].description;
-  commentsLoader.addEventListener('click', showFiveComments);
   firstFiveComments();
   openBigPicture();
 };
@@ -91,6 +89,7 @@ function openBigPicture() {
   document.addEventListener('keydown', onPopupEscKeydown);
   bigPictureClose.addEventListener('click', closeBigPicture);
   bigPictureClose.addEventListener('keydown', checkEnterKey);
+  commentsLoader.addEventListener('click', showFiveComments);
 }
 
 function closeBigPicture() {
@@ -101,6 +100,8 @@ function closeBigPicture() {
   document.removeEventListener('keydown', onPopupEscKeydown);
   bigPictureClose.removeEventListener('click', closeBigPicture);
   bigPictureClose.removeEventListener('keydown', checkEnterKey);
+  commentsLoader.removeEventListener('click', showFiveComments);
+
 }
 
 export {fillBigPicture};
