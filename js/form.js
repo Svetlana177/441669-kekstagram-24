@@ -25,14 +25,6 @@ const stopEvent = (evt) => {
   evt.stopPropagation();
 };
 
-//если в openUserModal для textHashtag добавить ту функцию то в фокусе окно можно закрыть по нажатию ESc
-//пока туда добавила  stopEvent так норм или это неправильно?
-/*const checkEscapeKey = (evt) => {
-  if (isEscapeKey(evt)) {
-    stopEvent();
-  }
-};*/
-
 //чистим форму
 const clearForm = () => {
   userModalElement.value = '';

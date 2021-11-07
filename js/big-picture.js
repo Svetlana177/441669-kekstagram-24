@@ -35,7 +35,7 @@ const fillComments = (item) => {
   return socialComments;
 };
 
-const firstFiveComments = () => {
+const showFirstComments = () => {
   const totalComments = commentsArr.length;
   const commentsPart = commentsArr.slice(0, 5);
   fillComments(commentsPart);
@@ -47,16 +47,16 @@ const firstFiveComments = () => {
   }
 };
 
-const showFiveComments = () => {
-  let plusFive = socialComments.children.length + MAXCOMMENTS;
-  const commentsPart = commentsArr.slice(socialComments.children.length, plusFive);
+const showMoreComments = () => {
+  let moreComments = socialComments.children.length + MAXCOMMENTS;
+  const commentsPart = commentsArr.slice(socialComments.children.length, moreComments);
   fillComments(commentsPart);
-  if (plusFive >= commentsArr.length) {
-    plusFive = commentsArr.length;
+  if (moreComments >= commentsArr.length) {
+    moreComments = commentsArr.length;
     commentsLoader.classList.add('hidden');
-    socialCommentCount.firstChild.textContent = `${plusFive} из `;
+    socialCommentCount.firstChild.textContent = `${moreComments} из `;
   }
-  socialCommentCount.children.textContent = `${plusFive} из `;
+  socialCommentCount.firstChild.textContent = `${moreComments} из `;
 };
 
 const fillBigPicture = (pictureId) => {
@@ -66,7 +66,7 @@ const fillBigPicture = (pictureId) => {
   likes.textContent = userPictureItem[pictureId].like.toString();
   commentsCount.textContent = userPictureItem[pictureId].comments.length.toString();
   description.textContent = userPictureItem[pictureId].description;
-  firstFiveComments();
+  showFirstComments();
   openBigPicture();
 };
 
@@ -89,7 +89,7 @@ function openBigPicture() {
   document.addEventListener('keydown', onPopupEscKeydown);
   bigPictureClose.addEventListener('click', closeBigPicture);
   bigPictureClose.addEventListener('keydown', checkEnterKey);
-  commentsLoader.addEventListener('click', showFiveComments);
+  commentsLoader.addEventListener('click', showMoreComments);
 }
 
 function closeBigPicture() {
@@ -100,8 +100,7 @@ function closeBigPicture() {
   document.removeEventListener('keydown', onPopupEscKeydown);
   bigPictureClose.removeEventListener('click', closeBigPicture);
   bigPictureClose.removeEventListener('keydown', checkEnterKey);
-  commentsLoader.removeEventListener('click', showFiveComments);
-
+  commentsLoader.removeEventListener('click', showMoreComments);
 }
 
 export {fillBigPicture};
