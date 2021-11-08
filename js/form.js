@@ -62,7 +62,6 @@ const checkTextHashtags = () => {
   }
 };
 
-
 const checkComments = () => {
   const commentLength = checkStringLength(textDescription.value, MAX_COMMENT_LENGTH);
   if (!commentLength) {
@@ -76,6 +75,128 @@ const checkComments = () => {
   textDescription.reportValidity();
 };
 
+//module10-task1
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
+const imgUploadPreview = document.querySelector('.img-upload__preview');
+const STEP = 25;
+const MINSTEPVALUE = 25;
+const MAXSTEPVALUE = 100;
+let currentValue = 100;
+
+scaleControlValue.value = `${currentValue}%`;
+
+const makeControlSmaller = () => {
+  if (currentValue !== MINSTEPVALUE) {
+    currentValue -= STEP;
+    scaleControlValue.value = `${currentValue}%`;
+    imgUploadPreview.style.transform = `scale(${currentValue / 100})`;
+  }
+};
+
+const makeControlBigger = () => {
+  if (currentValue !== MAXSTEPVALUE) {
+    currentValue += STEP;
+    scaleControlValue.value = `${currentValue}%`;
+    imgUploadPreview.style.transform = `scale(${currentValue / 100})`;
+  }
+};
+
+//nouislider
+const effectsList = document.querySelector('.effects__list');
+const effectLevelSlider = document.querySelector('.effect-level__slider');
+const effectLevelValue = document.querySelector('.effect-level__value');
+const effectLevel = document.querySelector('.effect-level');
+
+const SLIDER_PARAMETERS = {
+  'chrome': {
+    range: {
+      min: 0,
+      max: 1,
+    },
+    start: 1,
+    step: 0.1,
+    connect: 'lower',
+  },
+  'sepia': {
+    range: {
+      min: 0,
+      max: 1,
+    },
+    start: 1,
+    step: 0.1,
+    connect: 'lower',
+  },
+  'marvin': {
+    range: {
+      min: 0,
+      max: 100,
+    },
+    start: 100,
+    step: 1,
+    connect: 'lower',
+    format: {
+      to: (value) => `${value}%`,
+      from: (value) => Number(value.replace('%', '')),
+    },
+  },
+  'phobos': {
+    range: {
+      min: 0,
+      max: 1,
+    },
+    start: 1,
+    step: 0.1,
+    connect: 'lower',
+    format: {
+      to: (value) => `${value}px`,
+      from: (value) => Number(value.replace('px', '')),
+    },
+  },
+  'heat': {
+    range: {
+      min: 1,
+      max: 3,
+    },
+    start: 3,
+    step: 0.1,
+    connect: 'lower',
+  },
+};
+const FILTERS = {
+  'chrome': 'grayscale',
+  'sepia': 'sepia',
+  'marvin': 'invert',
+  'phobos': 'blur',
+  'heat': 'brightness',
+};
+
+const addEffect = (evt) => {
+  const currentEffectValue = evt.target.value;
+  if (evt.target.classList.contains('effects__radio')) {
+    effectLevel.classList.remove('hidden');
+    if (currentEffectValue === 'none') {
+      imgUploadPreview.className = '';
+      effectLevelSlider.noUiSlider.destroy();
+      effectLevel.classList.add('hidden');
+    } else {
+      if (!effectLevelSlider.noUiSlider) {
+        noUiSlider.create(effectLevelSlider, SLIDER_PARAMETERS[currentEffectValue]);
+      }
+      imgUploadPreview.className = `effects__preview--${currentEffectValue}`;
+      effectLevelSlider.noUiSlider.off('update');
+      effectLevelSlider.noUiSlider.on('update', (value, handle, unencoded) => {
+        //очищаем значение ползунка но не работает
+        imgUploadPreview.style.filter = '';
+        effectLevelValue.value = '';
+        imgUploadPreview.style.filter = `${FILTERS[currentEffectValue]}(${value[handle]})`;
+        effectLevelValue.value = unencoded[handle];
+      });
+    }
+  }
+};
+
 function openUserModal() {
   userModalElement.addEventListener('change', () => {
     imgUploadOverlay.classList.remove('hidden');
@@ -86,6 +207,9 @@ function openUserModal() {
     textDescription.addEventListener('keydown', stopEvent);
     textHashtag.addEventListener('input', checkTextHashtags);
     textDescription.addEventListener('input', checkComments);
+    scaleControlSmaller.addEventListener('click', makeControlSmaller);
+    scaleControlBigger.addEventListener('click', makeControlBigger);
+    effectsList.addEventListener('click', addEffect);
   });
 }
 
@@ -100,6 +224,9 @@ function closeUserModal() {
 
   textHashtag.removeEventListener('input', checkTextHashtags);
   textDescription.removeEventListener('input', checkComments);
+  scaleControlSmaller.removeEventListener('click', makeControlSmaller);
+  scaleControlBigger.removeEventListener('click', makeControlBigger);
+  effectsList.removeEventListener('click', addEffect);
 }
 
 userModalElement.addEventListener('click', openUserModal);
