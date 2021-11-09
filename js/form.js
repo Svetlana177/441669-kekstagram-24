@@ -188,8 +188,8 @@ const addEffect = (evt) => {
         effectLevelValue.value = unencoded[handle];
       });
     }
-  } else {
-    effectLevelSlider.noUiSlider?.destroy();
+  } else if (effectLevelSlider.noUiSlider) {
+    effectLevelSlider.noUiSlider.destroy();
   }
 };
 
