@@ -144,9 +144,9 @@ const SLIDER_PARAMETERS = {
   'phobos': {
     range: {
       min: 0,
-      max: 1,
+      max: 3,
     },
-    start: 1,
+    start: 3,
     step: 0.1,
     connect: 'lower',
     format: {
@@ -177,23 +177,19 @@ const addEffect = (evt) => {
   if (evt.target.classList.contains('effects__radio')) {
     effectLevel.classList.remove('hidden');
     if (currentEffectValue === 'none') {
+      imgUploadPreview.style.filter = '';
       imgUploadPreview.className = '';
-      effectLevelSlider.noUiSlider.destroy();
       effectLevel.classList.add('hidden');
     } else {
-      if (!effectLevelSlider.noUiSlider) {
-        noUiSlider.create(effectLevelSlider, SLIDER_PARAMETERS[currentEffectValue]);
-      }
+      noUiSlider.create(effectLevelSlider, SLIDER_PARAMETERS[currentEffectValue]);
       imgUploadPreview.className = `effects__preview--${currentEffectValue}`;
-      effectLevelSlider.noUiSlider.off('update');
       effectLevelSlider.noUiSlider.on('update', (value, handle, unencoded) => {
-        //очищаем значение ползунка но не работает
-        imgUploadPreview.style.filter = '';
-        effectLevelValue.value = '';
         imgUploadPreview.style.filter = `${FILTERS[currentEffectValue]}(${value[handle]})`;
         effectLevelValue.value = unencoded[handle];
       });
     }
+  } else {
+    effectLevelSlider.noUiSlider?.destroy();
   }
 };
 
