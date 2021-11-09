@@ -172,14 +172,18 @@ const FILTERS = {
   'heat': 'brightness',
 };
 
+const resetFilter = () => {
+  imgUploadPreview.style.filter = '';
+  imgUploadPreview.className = '';
+  effectLevel.classList.add('hidden');
+};
+
 const addEffect = (evt) => {
   const currentEffectValue = evt.target.value;
   if (evt.target.classList.contains('effects__radio')) {
     effectLevel.classList.remove('hidden');
     if (currentEffectValue === 'none') {
-      imgUploadPreview.style.filter = '';
-      imgUploadPreview.className = '';
-      effectLevel.classList.add('hidden');
+      resetFilter();
     } else {
       noUiSlider.create(effectLevelSlider, SLIDER_PARAMETERS[currentEffectValue]);
       imgUploadPreview.className = `effects__preview--${currentEffectValue}`;
@@ -188,7 +192,7 @@ const addEffect = (evt) => {
         effectLevelValue.value = unencoded[handle];
       });
     }
-  } else if (effectLevelSlider.noUiSlider) {
+  } else {
     effectLevelSlider.noUiSlider.destroy();
   }
 };
@@ -210,6 +214,7 @@ function openUserModal() {
 }
 
 function closeUserModal() {
+  resetFilter();
   imgUploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   clearForm();
