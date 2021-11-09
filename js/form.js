@@ -192,7 +192,7 @@ const addEffect = (evt) => {
         effectLevelValue.value = unencoded[handle];
       });
     }
-  } else {
+  } else if (effectLevelSlider.noUiSlider) {
     effectLevelSlider.noUiSlider.destroy();
   }
 };
