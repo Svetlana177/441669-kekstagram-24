@@ -1,5 +1,3 @@
-import './data.js';
-import {userPictureItem} from './picture.js';
 import {isEnterKey, isEscapeKey} from './utils/is-key-values.js';
 
 const bigPicture = document.querySelector('.big-picture');
@@ -61,11 +59,11 @@ const showMoreComments = () => {
 
 const fillBigPicture = (pictureId) => {
   clearSocialComments();
-  commentsArr = userPictureItem[pictureId].comments;
-  img.src = userPictureItem[pictureId].url;
-  likes.textContent = userPictureItem[pictureId].like.toString();
-  commentsCount.textContent = userPictureItem[pictureId].comments.length.toString();
-  description.textContent = userPictureItem[pictureId].description;
+  commentsArr = pictureId.comments;
+  img.src = pictureId.url;
+  likes.textContent = pictureId.like;
+  commentsCount.textContent = pictureId.comments.length.toString();
+  description.textContent = pictureId.description;
   showFirstComments();
   openBigPicture();
 };
@@ -103,4 +101,4 @@ function closeBigPicture() {
   commentsLoader.removeEventListener('click', showMoreComments);
 }
 
-export {fillBigPicture};
+export {fillBigPicture, bodyTag};

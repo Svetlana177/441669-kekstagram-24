@@ -1,4 +1,3 @@
-import {photoDescription} from './data.js';
 import {fillBigPicture} from './big-picture.js';
 import {isEnterKey} from './utils/is-key-values.js';
 
@@ -6,29 +5,28 @@ import {isEnterKey} from './utils/is-key-values.js';
 const pictureBlock = document.querySelector('.pictures');
 
 const userPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const arrayCorrectionPoint = 1;
 
-const userPictureItem = photoDescription();
+const renderSimilarPicture = (similarPictures) => {
 
-const pictureListFragment = document.createDocumentFragment();
+  const pictureListFragment = document.createDocumentFragment();
 
-userPictureItem.forEach(({id, url, like, comments}) => {
-  const pictureElement = userPictureTemplate.cloneNode(true);
-  pictureElement.querySelector('.picture__img').src = url;
-  pictureElement.querySelector('.picture__likes').textContent = like.toString();
-  pictureElement.querySelector('.picture__comments').textContent = comments.length.toString();
-  pictureListFragment.appendChild(pictureElement);
+  similarPictures.forEach(({id, url, likes, comments}) => {
+    const pictureElement = userPictureTemplate.cloneNode(true);
+    pictureElement.querySelector('.picture__img').src = url;
+    pictureElement.querySelector('.picture__likes').textContent = likes;
+    pictureElement.querySelector('.picture__comments').textContent = comments.length.toString();
+    pictureListFragment.appendChild(pictureElement);
 
-  pictureElement.addEventListener('click', () => {
-    fillBigPicture(id - arrayCorrectionPoint);
+    pictureElement.addEventListener('click', () => {
+      fillBigPicture(similarPictures[id]);
+    });
+    pictureElement.addEventListener('keydown', (evt) => {
+      if (isEnterKey(evt)) {
+        fillBigPicture(similarPictures[id]);
+      }
+    });
   });
-  pictureElement.addEventListener('keydown', (evt) => {
-    if (isEnterKey(evt)) {
-      fillBigPicture(id - arrayCorrectionPoint);
-    }
-  });
-});
+  pictureBlock.appendChild(pictureListFragment);
+};
 
-pictureBlock.appendChild(pictureListFragment);
-
-export {userPictureItem};
+export {renderSimilarPicture};
