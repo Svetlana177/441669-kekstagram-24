@@ -24,16 +24,10 @@ const showForm = (success = true) => {
   const message = success ? successContainer.cloneNode(true) : errorContainer.cloneNode(true);
   bodyTag.appendChild(message);
   message.style.zIndex = 5;
-  const button = message.querySelector('.success__button');
-  const errorButton = message.querySelector('.error__button');
+  const button = message.querySelector('button');
   const keydownFunc = onMessageEscKeydown.bind(message);
 
   button.addEventListener('click', () => {
-    message.style.display = 'none';
-    document.removeEventListener('keydown', keydownFunc);
-  });
-
-  errorButton.addEventListener('click', () => {
     message.style.display = 'none';
     document.removeEventListener('keydown', keydownFunc);
   });
