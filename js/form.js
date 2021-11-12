@@ -222,13 +222,13 @@ userModalElement.addEventListener('click', openFormModal);
 userModalCloseButton.addEventListener('click', closeFormModal);
 
 
-const setUserFormSubmit = (onSuccess) => {
+const setUserFormSubmit = (task) => {
   imgUploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     sendData(
-      () => onSuccess(),
-      () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+      () => task(),
+      () => task(),
       new FormData(evt.target),
     );
   });
