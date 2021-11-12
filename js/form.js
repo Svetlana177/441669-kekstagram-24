@@ -1,4 +1,3 @@
-import {showAlert} from './utils/data_exchange.js';
 import {checkStringLength} from './utils/check-string-length.js';
 import {sendData} from './api.js';
 
