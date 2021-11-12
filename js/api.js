@@ -1,4 +1,4 @@
-import {formError, formSuccess, showAlert} from './utils/data_exchange.js';
+import {showForm, showAlert} from './utils/data_exchange.js';
 import {clearForm, resetFilter} from './form.js';
 
 const getData = (onSuccess) => {
@@ -29,10 +29,12 @@ const sendData = (onSuccess, onFail, body) => {
         onSuccess();
         clearForm();
         resetFilter();
-        formSuccess();
+        showForm();
       } else {
         onFail('Не удалось отправить форму. Попробуйте ещё раз');
-        formError();
+        clearForm();
+        resetFilter();
+        showForm(false);
       }
     })
     .catch(() => {

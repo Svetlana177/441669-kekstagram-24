@@ -168,6 +168,7 @@ const FILTERS = {
 
 const resetFilter = () => {
   imgUploadPreview.style.filter = '';
+  imgUploadPreview.style.transform = '';
   imgUploadPreview.className = '';
   effectLevel.classList.add('hidden');
 };

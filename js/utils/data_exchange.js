@@ -5,62 +5,43 @@ const errorTemplate = document.querySelector('#error').content;
 const errorContainer = errorTemplate.querySelector('.error');
 const successTemplate = document.querySelector('#success').content;
 const successContainer = successTemplate.querySelector('.success');
+const TIME = 4000;
 
-const formSuccess = () => {
-  const successMessage = successContainer.cloneNode(true);
-  bodyTag.appendChild(successMessage);
-  successMessage.style.zIndex = 5;
-  const successButton = successMessage.querySelector('.success__button');
-
-  function onMessageEscKeydown(evt) {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      successMessage.style.display = 'none';
-    }
+function onMessageEscKeydown(evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    this.style.display = 'none';
   }
+}
 
-  function onContains(evt) {
-    if (evt.target.contains(successMessage)) {
-      successMessage.style.display = 'none';
-    }
+function onContains(evt) {
+  if (evt.target.contains(this)) {
+    this.style.display = 'none';
   }
+}
 
-  successButton.addEventListener('click', () => {
-    successMessage.style.display = 'none';
-    document.removeEventListener('keydown', onMessageEscKeydown);
+const showForm = (success = true) => {
+  const message = success ? successContainer.cloneNode(true) : errorContainer.cloneNode(true);
+  bodyTag.appendChild(message);
+  message.style.zIndex = 5;
+  const button = message.querySelector('.success__button');
+  const errorButton = message.querySelector('.error__button');
+  const keydownFunc = onMessageEscKeydown.bind(message);
+
+  button.addEventListener('click', () => {
+    message.style.display = 'none';
+    document.removeEventListener('keydown', keydownFunc);
   });
-  document.addEventListener('keydown', onMessageEscKeydown);
-  document.addEventListener('click', onContains);
-};
-
-const formError = () => {
-  const errorMessage = errorContainer.cloneNode(true);
-  errorMessage.style.zIndex = 5;
-  bodyTag.appendChild(errorMessage);
-  const errorButton = errorMessage.querySelector('.error__button');
-
-  function onErrorEscKeydown(evt) {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      errorMessage.style.display = 'none';
-    }
-  }
-
-  function onContains(evt) {
-    if (evt.target.contains(errorMessage)) {
-      errorMessage.style.display = 'none';
-    }
-  }
 
   errorButton.addEventListener('click', () => {
-    errorMessage.style.display = 'none';
-    document.removeEventListener('keydown', onErrorEscKeydown);
+    message.style.display = 'none';
+    document.removeEventListener('keydown', keydownFunc);
   });
-  document.addEventListener('keydown', onErrorEscKeydown);
-  document.addEventListener('click', onContains);
+
+  document.addEventListener('keydown', keydownFunc);
+  document.addEventListener('click', onContains.bind(message));
 };
 
-const TIME = 6000;
 const showAlert = (message) => {
   const alertMessage = document.createElement('div');
   alertMessage.style.position = 'absolute';
@@ -84,4 +65,4 @@ const showAlert = (message) => {
   }, TIME);
 };
 
-export {formSuccess, formError, showAlert};
+export {showForm, showAlert};

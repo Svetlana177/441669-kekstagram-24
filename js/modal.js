@@ -1,4 +1,4 @@
-import {userModalElement} from './form.js';
+import {clearForm, userModalElement} from './form.js';
 import {isEscapeKey} from './utils/is-key-values.js';
 import {bodyTag} from './big-picture.js';
 const userModalCloseButton = document.querySelector('#upload-cancel');
@@ -20,6 +20,7 @@ function openUserModal() {
 }
 
 function closeUserModal() {
+  clearForm();
   imgUploadOverlay.classList.add('hidden');
   bodyTag.classList.remove('modal-open');
   document.removeEventListener('keydown', onPopupEscKeydown);
