@@ -1,9 +1,7 @@
-import {isEscapeKey} from './utils/is-key-values.js';
 import {checkStringLength} from './utils/check-string-length.js';
+import {sendData} from './api.js';
 
 const userModalElement = document.querySelector('#upload-file');
-const imgUploadOverlay = document.querySelector('.img-upload__overlay');
-const body = document.querySelector('body');
 const textDescription = document.querySelector('.text__description');
 const userModalCloseButton = document.querySelector('#upload-cancel');
 
@@ -12,13 +10,22 @@ const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
 const regularValue = /^#[A-Za-zА-Яа-яЁё0-9#]{1,19}$|(^$)/;
 const symbols = /^#\S*#\S*/;
+const imgUploadForm = document.querySelector('.img-upload__form');
 
-const onPopupEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeUserModal();
-  }
-};
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
+const imgUploadPreview = document.querySelector('.img-upload__preview');
+const STEP = 25;
+const MINSTEPVALUE = 25;
+const MAXSTEPVALUE = 100;
+let currentValue = 100;
+
+//noUiSlider
+const effectsList = document.querySelector('.effects__list');
+const effectLevelSlider = document.querySelector('.effect-level__slider');
+const effectLevelValue = document.querySelector('.effect-level__value');
+const effectLevel = document.querySelector('.effect-level');
 
 // запрет на закрытие по Esc при фокусе
 const stopEvent = (evt) => {
@@ -76,15 +83,6 @@ const checkComments = () => {
 };
 
 //module10-task1
-const scaleControlSmaller = document.querySelector('.scale__control--smaller');
-const scaleControlBigger = document.querySelector('.scale__control--bigger');
-const scaleControlValue = document.querySelector('.scale__control--value');
-const imgUploadPreview = document.querySelector('.img-upload__preview');
-const STEP = 25;
-const MINSTEPVALUE = 25;
-const MAXSTEPVALUE = 100;
-let currentValue = 100;
-
 scaleControlValue.value = `${currentValue}%`;
 
 const makeControlSmaller = () => {
@@ -104,11 +102,6 @@ const makeControlBigger = () => {
 };
 
 //nouislider
-const effectsList = document.querySelector('.effects__list');
-const effectLevelSlider = document.querySelector('.effect-level__slider');
-const effectLevelValue = document.querySelector('.effect-level__value');
-const effectLevel = document.querySelector('.effect-level');
-
 const SLIDER_PARAMETERS = {
   'chrome': {
     range: {
@@ -174,6 +167,7 @@ const FILTERS = {
 
 const resetFilter = () => {
   imgUploadPreview.style.filter = '';
+  imgUploadPreview.style.transform = '';
   imgUploadPreview.className = '';
   effectLevel.classList.add('hidden');
 };
@@ -197,12 +191,8 @@ const addEffect = (evt) => {
   }
 };
 
-function openUserModal() {
+function openFormModal() {
   userModalElement.addEventListener('change', () => {
-    imgUploadOverlay.classList.remove('hidden');
-    body.classList.add('modal-open');
-
-    document.addEventListener('keydown', onPopupEscKeydown);
     textHashtag.addEventListener('keydown', stopEvent);
     textDescription.addEventListener('keydown', stopEvent);
     textHashtag.addEventListener('input', checkTextHashtags);
@@ -213,13 +203,9 @@ function openUserModal() {
   });
 }
 
-function closeUserModal() {
+function closeFormModal() {
   resetFilter();
-  imgUploadOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
   clearForm();
-
-  document.removeEventListener('keydown', onPopupEscKeydown);
   textHashtag.removeEventListener('keydown', stopEvent);
   textDescription.removeEventListener('keydown', stopEvent);
 
@@ -230,5 +216,22 @@ function closeUserModal() {
   effectsList.removeEventListener('click', addEffect);
 }
 
-userModalElement.addEventListener('click', openUserModal);
-userModalCloseButton.addEventListener('click', closeUserModal);
+
+userModalElement.addEventListener('click', openFormModal);
+userModalCloseButton.addEventListener('click', closeFormModal);
+
+
+const setUserFormSubmit = (task) => {
+  imgUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => task(),
+      () => task(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+export {userModalElement, setUserFormSubmit, clearForm, resetFilter};
+
