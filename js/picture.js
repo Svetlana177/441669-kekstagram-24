@@ -30,11 +30,7 @@ const filterDefault = (first, second) => {
   }
 };
 
-const filterRandom = () => {
-  return Math.random() - 0.5;
-
-};
-
+const filterRandom = () => Math.random() - 0.5;
 
 const renderSimilarPicture = (similarPictures) => {
   const allPictures = pictures.data;
