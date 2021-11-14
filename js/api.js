@@ -1,19 +1,13 @@
-import {showForm, showAlert} from './utils/data_exchange.js';
+import {showAlert, showForm} from './utils/data_exchange.js';
 import {clearForm, resetFilter} from './form.js';
 
-const getData = (onSuccess) => {
-  fetch('https://24.javascript.pages.academy/kekstagram/data')
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        showAlert('Не удалось получить изображения. Обновите страницу');
-      }
-    })
-    .then((pictures) => {
-      onSuccess(pictures);
-    });
-
+const getData = async () => {
+  try {
+    const response = await fetch('https://24.javascript.pages.academy/kekstagram/data');
+    return await response.json();
+  } catch (error) {
+    showAlert('Не удалось получить изображения. Обновите страницу');
+  }
 };
 
 const sendData = (onSuccess, onFail, body) => {
