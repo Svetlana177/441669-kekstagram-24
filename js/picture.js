@@ -15,7 +15,7 @@ const pictures = {
 };
 
 const filterDiscussed = (first, second) => {
-  if (first.likes < second.likes) {
+  if (first.comments < second.comments) {
     return 1;
   } else {
     return -1;
@@ -30,7 +30,11 @@ const filterDefault = (first, second) => {
   }
 };
 
-const filterRandom = () => Math.random() - 0.5;
+const filterRandom = () => {
+  return Math.random() - 0.5;
+
+};
+
 
 const renderSimilarPicture = (similarPictures) => {
   const allPictures = pictures.data;
@@ -80,7 +84,7 @@ const onButtonClick = () => {
     const processDebounce = debounce(() => renderSimilarPicture());
     const processRandomDebounce = debounce(() => renderSimilarPicture(10));
 
-    if (evt.target.classList.contains('filter-discussed')) {
+    if (evt.target.id === 'filter-discussed') {
       clearPicture();
       removeFilter();
       evt.target.classList.add('img-filters__button--active');
@@ -88,7 +92,7 @@ const onButtonClick = () => {
       processDebounce();
 
     }
-    if (evt.target.classList.contains('filter-random')) {
+    if (evt.target.id === 'filter-random') {
       clearPicture();
       removeFilter();
       evt.target.classList.add('img-filters__button--active');
@@ -96,7 +100,7 @@ const onButtonClick = () => {
       processRandomDebounce();
 
     }
-    if (evt.target.classList.contains('filter-default')) {
+    if (evt.target.id === 'filter-default') {
       clearPicture();
       removeFilter();
       evt.target.classList.add('img-filters__button--active');
