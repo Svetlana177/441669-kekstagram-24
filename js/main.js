@@ -1,11 +1,18 @@
-import {renderSimilarPicture} from './picture.js';
+import {onButtonClick, pictures, renderSimilarPicture} from './picture.js';
 import {closeUserModal} from './modal.js';
 import {setUserFormSubmit} from './form.js';
 import {getData} from './api.js';
 
+const getTask = async () => {
+  const data = await getData();
 
-getData((picture) => {
-  renderSimilarPicture(picture);
-});
+  pictures.setData(data);
+  renderSimilarPicture();
+  onButtonClick();
 
-setUserFormSubmit(closeUserModal);
+  document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+  setUserFormSubmit(closeUserModal);
+};
+
+getTask();
+
