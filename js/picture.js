@@ -41,19 +41,21 @@ const filterDefault = (first, second) => {
 const renderSimilarPicture = (similarPictures) => {
   const pictureItems = pictures.data;
   const pictureListFragment = document.createDocumentFragment();
-  pictureItems.slice(0, similarPictures).forEach(({id, url, likes, comments}) => {
+  const somePhotos = pictureItems.slice(0, similarPictures);
+  somePhotos.forEach(({id, url, likes, comments}) => {
     const pictureElement = userPictureTemplate.cloneNode(true);
     pictureElement.querySelector('.picture__img').src = url;
     pictureElement.querySelector('.picture__likes').textContent = likes;
     pictureElement.querySelector('.picture__comments').textContent = comments.length.toString();
     pictureListFragment.appendChild(pictureElement);
 
+    const findIndex = somePhotos.findIndex((element) => element.id === id);
     pictureElement.addEventListener('click', () => {
-      fillBigPicture(pictureItems[id]);
+      fillBigPicture(somePhotos[findIndex]);
     });
     pictureElement.addEventListener('keydown', (evt) => {
       if (isEnterKey(evt)) {
-        fillBigPicture(pictureItems[id]);
+        fillBigPicture(somePhotos[findIndex]);
       }
     });
   });
@@ -95,6 +97,7 @@ const onButtonClick = () => {
     if (evt.target.id === 'filter-random') {
       clearPicture();
       removeFilter();
+      //console.log('######', getRandomPicture());
       evt.target.classList.add('img-filters__button--active');
       pictures.data.sort(getRandomPicture);
       makeRandomDebounce();
