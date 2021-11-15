@@ -2,9 +2,17 @@ import {fillBigPicture} from './big-picture.js';
 import {isEnterKey} from './utils/is-key-values.js';
 import {debounce} from './utils/debounce.js';
 
-//Контейнер для изображений от других пользователей
 const pictureBlock = document.querySelector('.pictures');
 const userPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const getRandomPicture = () => Math.random() - 0.5;
+
+const filtersContainer = document.querySelector('.img-filters');
+filtersContainer.classList.remove('img-filters--inactive');
+const filterForm = document.querySelector('.img-filters__form');
+const discussedFilter = document.querySelector('#filter-discussed');
+const randomFilter = document.querySelector('#filter-random');
+const defaultFilter = document.querySelector('#filter-default');
+
 
 const pictures = {
   data: [],
@@ -30,12 +38,10 @@ const filterDefault = (first, second) => {
   }
 };
 
-const filterRandom = () => Math.random() - 0.5;
-
 const renderSimilarPicture = (similarPictures) => {
-  const allPictures = pictures.data;
+  const pictureItems = pictures.data;
   const pictureListFragment = document.createDocumentFragment();
-  allPictures.slice(0, similarPictures).forEach(({id, url, likes, comments}) => {
+  pictureItems.slice(0, similarPictures).forEach(({id, url, likes, comments}) => {
     const pictureElement = userPictureTemplate.cloneNode(true);
     pictureElement.querySelector('.picture__img').src = url;
     pictureElement.querySelector('.picture__likes').textContent = likes;
@@ -43,23 +49,16 @@ const renderSimilarPicture = (similarPictures) => {
     pictureListFragment.appendChild(pictureElement);
 
     pictureElement.addEventListener('click', () => {
-      fillBigPicture(allPictures[id]);
+      fillBigPicture(pictureItems[id]);
     });
     pictureElement.addEventListener('keydown', (evt) => {
       if (isEnterKey(evt)) {
-        fillBigPicture(allPictures[id]);
+        fillBigPicture(pictureItems[id]);
       }
     });
   });
   pictureBlock.appendChild(pictureListFragment);
 };
-
-const filtersContainer = document.querySelector('.img-filters');
-filtersContainer.classList.remove('img-filters--inactive');
-const filterForm = document.querySelector('.img-filters__form');
-const discussedFilter = document.querySelector('#filter-discussed');
-const randomFilter = document.querySelector('#filter-random');
-const defaultFilter = document.querySelector('#filter-default');
 
 const removeFilter = () => {
   discussedFilter.classList.remove('img-filters__button--active');
@@ -77,31 +76,28 @@ const clearPicture = () => {
 
 const onButtonClick = () => {
   filterForm.addEventListener('click', (evt) => {
-    const processDebounce = debounce(() => renderSimilarPicture());
-    const processRandomDebounce = debounce(() => renderSimilarPicture(10));
-
-    if (evt.target.id === 'filter-discussed') {
-      clearPicture();
-      removeFilter();
-      evt.target.classList.add('img-filters__button--active');
-      pictures.data.sort(filterDiscussed);
-      processDebounce();
-
-    }
-    if (evt.target.id === 'filter-random') {
-      clearPicture();
-      removeFilter();
-      evt.target.classList.add('img-filters__button--active');
-      pictures.data.sort(filterRandom);
-      processRandomDebounce();
-
-    }
+    const makeDebounce = debounce(() => renderSimilarPicture());
+    const makeRandomDebounce = debounce(() => renderSimilarPicture(10));
     if (evt.target.id === 'filter-default') {
       clearPicture();
       removeFilter();
       evt.target.classList.add('img-filters__button--active');
       pictures.data.sort(filterDefault);
-      processDebounce();
+      makeDebounce();
+    }
+    if (evt.target.id === 'filter-discussed') {
+      clearPicture();
+      removeFilter();
+      evt.target.classList.add('img-filters__button--active');
+      pictures.data.sort(filterDiscussed);
+      makeDebounce();
+    }
+    if (evt.target.id === 'filter-random') {
+      clearPicture();
+      removeFilter();
+      evt.target.classList.add('img-filters__button--active');
+      pictures.data.sort(getRandomPicture);
+      makeRandomDebounce();
     }
   });
 };
