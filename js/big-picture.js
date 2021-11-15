@@ -16,7 +16,6 @@ const MAXCOMMENTS = 5;
 const socialCommentFragment = document.createDocumentFragment();
 let commentsArr = [];
 
-//чистим комменты
 const clearSocialComments = () => {
   socialComments.innerHTML = '';
 };

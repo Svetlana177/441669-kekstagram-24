@@ -21,87 +21,11 @@ const MINSTEPVALUE = 25;
 const MAXSTEPVALUE = 100;
 let currentValue = 100;
 
-//noUiSlider
 const effectsList = document.querySelector('.effects__list');
 const effectLevelSlider = document.querySelector('.effect-level__slider');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const effectLevel = document.querySelector('.effect-level');
 
-// запрет на закрытие по Esc при фокусе
-const stopEvent = (evt) => {
-  evt.stopPropagation();
-};
-
-//чистим форму
-const clearForm = () => {
-  userModalElement.value = '';
-  document.querySelector('.img-upload__form').reset();
-  textHashtag.classList.remove('validation__error');
-};
-
-const checkTextHashtags = () => {
-  const hashtagText = textHashtag.value.toLowerCase();
-  const hashtagMass = hashtagText.split(' ');
-  const tempHashtagMass = [];
-  textHashtag.setCustomValidity('');
-  textHashtag.classList.remove('validation__error');
-  for (let i = 0; i < hashtagMass.length; i++) {
-    if (hashtagMass[i] === '#') {
-      textHashtag.setCustomValidity('Хэш-тег не может состоять только из одной решётки.');
-      textHashtag.classList.add('validation__error');
-    } else if (!regularValue.test(hashtagMass[i])) {
-      textHashtag.setCustomValidity('Строка после решётки должна состоять из 20 букв и чисел, включая хештег и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;');
-      textHashtag.classList.add('validation__error');
-    } else if (symbols.test(hashtagMass[i])) {
-      textHashtag.setCustomValidity('Хэш-теги должны разделяться пробелами.');
-      textHashtag.classList.add('validation__error');
-    } else if (hashtagMass.length > MAX_HASHTAG_COUNT) {
-      textHashtag.setCustomValidity('Нельзя указать больше 5 хэш-тегов');
-      textHashtag.classList.add('validation__error');
-    } else if (tempHashtagMass.includes(hashtagMass[i])) {
-      textHashtag.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
-      textHashtag.classList.add('validation__error');
-    } else {
-      tempHashtagMass.push(hashtagMass[i]);
-    }
-    // проверять валидность поля на каждый ввод символа
-    textHashtag.reportValidity();
-  }
-};
-
-const checkComments = () => {
-  const commentLength = checkStringLength(textDescription.value, MAX_COMMENT_LENGTH);
-  if (!commentLength) {
-    textDescription.setCustomValidity('');
-    textDescription.classList.add('validation__error');
-    textDescription.setCustomValidity(`Длина комментария не может составлять больше 140 символов. Лишних символов: ${textDescription.value.length - MAX_COMMENT_LENGTH}.`);
-  } else {
-    textDescription.setCustomValidity('');
-    textDescription.classList.remove('validation__error');
-  }
-  textDescription.reportValidity();
-};
-
-//module10-task1
-scaleControlValue.value = `${currentValue}%`;
-
-const makeControlSmaller = () => {
-  if (currentValue !== MINSTEPVALUE) {
-    currentValue -= STEP;
-    scaleControlValue.value = `${currentValue}%`;
-    imgUploadPreview.style.transform = `scale(${currentValue / 100})`;
-  }
-};
-
-const makeControlBigger = () => {
-  if (currentValue !== MAXSTEPVALUE) {
-    currentValue += STEP;
-    scaleControlValue.value = `${currentValue}%`;
-    imgUploadPreview.style.transform = `scale(${currentValue / 100})`;
-  }
-};
-
-//nouislider
 const SLIDER_PARAMETERS = {
   'chrome': {
     range: {
@@ -165,6 +89,76 @@ const FILTERS = {
   'heat': 'brightness',
 };
 
+const stopEvent = (evt) => {
+  evt.stopPropagation();
+};
+
+const clearForm = () => {
+  userModalElement.value = '';
+  document.querySelector('.img-upload__form').reset();
+  textHashtag.classList.remove('validation__error');
+};
+
+const checkTextHashtags = () => {
+  const hashtagText = textHashtag.value.toLowerCase();
+  const hashtagMass = hashtagText.split(' ');
+  const tempHashtagMass = [];
+  textHashtag.setCustomValidity('');
+  textHashtag.classList.remove('validation__error');
+  for (let i = 0; i < hashtagMass.length; i++) {
+    if (hashtagMass[i] === '#') {
+      textHashtag.setCustomValidity('Хэш-тег не может состоять только из одной решётки.');
+      textHashtag.classList.add('validation__error');
+    } else if (!regularValue.test(hashtagMass[i])) {
+      textHashtag.setCustomValidity('Строка после решётки должна состоять из 20 букв и чисел, включая хештег и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.;');
+      textHashtag.classList.add('validation__error');
+    } else if (symbols.test(hashtagMass[i])) {
+      textHashtag.setCustomValidity('Хэш-теги должны разделяться пробелами.');
+      textHashtag.classList.add('validation__error');
+    } else if (hashtagMass.length > MAX_HASHTAG_COUNT) {
+      textHashtag.setCustomValidity('Нельзя указать больше 5 хэш-тегов');
+      textHashtag.classList.add('validation__error');
+    } else if (tempHashtagMass.includes(hashtagMass[i])) {
+      textHashtag.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
+      textHashtag.classList.add('validation__error');
+    } else {
+      tempHashtagMass.push(hashtagMass[i]);
+    }
+    textHashtag.reportValidity();
+  }
+};
+
+const checkComments = () => {
+  const commentLength = checkStringLength(textDescription.value, MAX_COMMENT_LENGTH);
+  if (!commentLength) {
+    textDescription.setCustomValidity('');
+    textDescription.classList.add('validation__error');
+    textDescription.setCustomValidity(`Длина комментария не может составлять больше 140 символов. Лишних символов: ${textDescription.value.length - MAX_COMMENT_LENGTH}.`);
+  } else {
+    textDescription.setCustomValidity('');
+    textDescription.classList.remove('validation__error');
+  }
+  textDescription.reportValidity();
+};
+
+scaleControlValue.value = `${currentValue}%`;
+
+const makeControlSmaller = () => {
+  if (currentValue !== MINSTEPVALUE) {
+    currentValue -= STEP;
+    scaleControlValue.value = `${currentValue}%`;
+    imgUploadPreview.style.transform = `scale(${currentValue / 100})`;
+  }
+};
+
+const makeControlBigger = () => {
+  if (currentValue !== MAXSTEPVALUE) {
+    currentValue += STEP;
+    scaleControlValue.value = `${currentValue}%`;
+    imgUploadPreview.style.transform = `scale(${currentValue / 100})`;
+  }
+};
+
 const resetFilter = () => {
   imgUploadPreview.style.filter = '';
   imgUploadPreview.style.transform = '';
@@ -208,14 +202,12 @@ function closeFormModal() {
   clearForm();
   textHashtag.removeEventListener('keydown', stopEvent);
   textDescription.removeEventListener('keydown', stopEvent);
-
   textHashtag.removeEventListener('input', checkTextHashtags);
   textDescription.removeEventListener('input', checkComments);
   scaleControlSmaller.removeEventListener('click', makeControlSmaller);
   scaleControlBigger.removeEventListener('click', makeControlBigger);
   effectsList.removeEventListener('click', addEffect);
 }
-
 
 userModalElement.addEventListener('click', openFormModal);
 userModalCloseButton.addEventListener('click', closeFormModal);
