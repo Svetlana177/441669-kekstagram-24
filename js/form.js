@@ -1,31 +1,11 @@
 import {checkStringLength} from './utils/check-string-length.js';
 import {sendData} from './api.js';
 
-const userModalElement = document.querySelector('#upload-file');
-const textDescription = document.querySelector('.text__description');
-const userModalCloseButton = document.querySelector('#upload-cancel');
-
-const textHashtag = document.querySelector('.text__hashtags');
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
-const regularValue = /^#[A-Za-zА-Яа-яЁё0-9#]{1,19}$|(^$)/;
-const symbols = /^#\S*#\S*/;
-const imgUploadForm = document.querySelector('.img-upload__form');
-
-const scaleControlSmaller = document.querySelector('.scale__control--smaller');
-const scaleControlBigger = document.querySelector('.scale__control--bigger');
-const scaleControlValue = document.querySelector('.scale__control--value');
-const imgUploadPreview = document.querySelector('.img-upload__preview');
 const STEP = 25;
-const MINSTEPVALUE = 25;
-const MAXSTEPVALUE = 100;
-let currentValue = 100;
-
-const effectsList = document.querySelector('.effects__list');
-const effectLevelSlider = document.querySelector('.effect-level__slider');
-const effectLevelValue = document.querySelector('.effect-level__value');
-const effectLevel = document.querySelector('.effect-level');
-
+const MIN_STEP_VALUE  = 25;
+const MAX_STEP_VALUE = 100;
 const SLIDER_PARAMETERS = {
   'chrome': {
     range: {
@@ -81,6 +61,24 @@ const SLIDER_PARAMETERS = {
     connect: 'lower',
   },
 };
+const userModalElement = document.querySelector('#upload-file');
+const textDescription = document.querySelector('.text__description');
+const userModalCloseButton = document.querySelector('#upload-cancel');
+const textHashtag = document.querySelector('.text__hashtags');
+const regularValue = /^#[A-Za-zА-Яа-яЁё0-9#]{1,19}$|(^$)/;
+const symbols = /^#\S*#\S*/;
+const imgUploadForm = document.querySelector('.img-upload__form');
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
+const imgUploadPreview = document.querySelector('.img-upload__preview');
+let currentValue = 100;
+
+const effectsList = document.querySelector('.effects__list');
+const effectLevelSlider = document.querySelector('.effect-level__slider');
+const effectLevelValue = document.querySelector('.effect-level__value');
+const effectLevel = document.querySelector('.effect-level');
+
 const FILTERS = {
   'chrome': 'grayscale',
   'sepia': 'sepia',
@@ -144,7 +142,7 @@ const checkComments = () => {
 scaleControlValue.value = `${currentValue}%`;
 
 const makeControlSmaller = () => {
-  if (currentValue !== MINSTEPVALUE) {
+  if (currentValue !== MIN_STEP_VALUE ) {
     currentValue -= STEP;
     scaleControlValue.value = `${currentValue}%`;
     imgUploadPreview.style.transform = `scale(${currentValue / 100})`;
@@ -152,7 +150,7 @@ const makeControlSmaller = () => {
 };
 
 const makeControlBigger = () => {
-  if (currentValue !== MAXSTEPVALUE) {
+  if (currentValue !== MAX_STEP_VALUE) {
     currentValue += STEP;
     scaleControlValue.value = `${currentValue}%`;
     imgUploadPreview.style.transform = `scale(${currentValue / 100})`;
@@ -186,6 +184,7 @@ const addEffect = (evt) => {
 };
 
 function openFormModal() {
+  resetFilter();
   userModalElement.addEventListener('change', () => {
     textHashtag.addEventListener('keydown', stopEvent);
     textDescription.addEventListener('keydown', stopEvent);

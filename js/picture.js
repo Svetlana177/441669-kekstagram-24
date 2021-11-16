@@ -4,15 +4,10 @@ import {debounce} from './utils/debounce.js';
 
 const pictureBlock = document.querySelector('.pictures');
 const userPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const getRandomPicture = () => Math.random() - 0.5;
-
-const filtersContainer = document.querySelector('.img-filters');
-filtersContainer.classList.remove('img-filters--inactive');
 const filterForm = document.querySelector('.img-filters__form');
 const discussedFilter = document.querySelector('#filter-discussed');
 const randomFilter = document.querySelector('#filter-random');
 const defaultFilter = document.querySelector('#filter-default');
-
 
 const pictures = {
   data: [],
@@ -21,6 +16,8 @@ const pictures = {
     this.data = picturesData;
   },
 };
+
+const getRandomPicture = () => Math.random() - 0.5;
 
 const filterDiscussed = (first, second) => {
   if (first.comments < second.comments) {
@@ -70,9 +67,10 @@ const removeFilter = () => {
 
 const clearPicture = () => {
   const picture = document.getElementsByClassName('picture');
-  let numberPicture;
-  while ((numberPicture = picture[0])) {
+  let numberPicture = picture[0];
+  while (numberPicture) {
     numberPicture.parentNode.removeChild(numberPicture);
+    numberPicture = picture[0];
   }
 };
 
@@ -97,7 +95,6 @@ const onButtonClick = () => {
     if (evt.target.id === 'filter-random') {
       clearPicture();
       removeFilter();
-      //console.log('######', getRandomPicture());
       evt.target.classList.add('img-filters__button--active');
       pictures.data.sort(getRandomPicture);
       makeRandomDebounce();
