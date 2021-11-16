@@ -1,4 +1,4 @@
-import {showAlert, showForm} from './utils/data_exchange.js';
+import {showAlert, showForm} from './utils/data-exchange.js';
 import {clearForm, resetFilter} from './form.js';
 
 const getData = async () => {

@@ -1,5 +1,6 @@
 import {isEnterKey, isEscapeKey} from './utils/is-key-values.js';
 
+const MAX_COMMENTS = 5;
 const bigPicture = document.querySelector('.big-picture');
 const bodyTag = document.querySelector('body');
 const bigPictureImg = document.querySelector('.big-picture__img');
@@ -12,9 +13,8 @@ const description = document.querySelector('.social__caption');
 const socialCommentCount = document.querySelector('.social__comment-count');
 const commentsLoader = document.querySelector('.comments-loader');
 const bigPictureClose = document.querySelector('.big-picture__cancel');
-const MAXCOMMENTS = 5;
 const socialCommentFragment = document.createDocumentFragment();
-let commentsArr = [];
+let comments = [];
 
 const clearSocialComments = () => {
   socialComments.innerHTML = '';
@@ -33,23 +33,23 @@ const fillComments = (item) => {
 };
 
 const showFirstComments = () => {
-  const totalComments = commentsArr.length;
-  const commentsPart = commentsArr.slice(0, 5);
+  const totalComments = comments.length;
+  const commentsPart = comments.slice(0, 5);
   fillComments(commentsPart);
   commentsLoader.classList.remove('hidden');
-  socialCommentCount.firstChild.textContent = `${MAXCOMMENTS} из `;
-  if (totalComments <= MAXCOMMENTS) {
+  socialCommentCount.firstChild.textContent = `${MAX_COMMENTS} из `;
+  if (totalComments <= MAX_COMMENTS) {
     commentsLoader.classList.add('hidden');
     socialCommentCount.firstChild.textContent = `${totalComments} из `;
   }
 };
 
 const showMoreComments = () => {
-  let moreComments = socialComments.children.length + MAXCOMMENTS;
-  const commentsPart = commentsArr.slice(socialComments.children.length, moreComments);
+  let moreComments = socialComments.children.length + MAX_COMMENTS;
+  const commentsPart = comments.slice(socialComments.children.length, moreComments);
   fillComments(commentsPart);
-  if (moreComments >= commentsArr.length) {
-    moreComments = commentsArr.length;
+  if (moreComments >= comments.length) {
+    moreComments = comments.length;
     commentsLoader.classList.add('hidden');
     socialCommentCount.firstChild.textContent = `${moreComments} из `;
   }
@@ -58,7 +58,7 @@ const showMoreComments = () => {
 
 const fillBigPicture = (pictureId) => {
   clearSocialComments();
-  commentsArr = pictureId.comments;
+  comments = pictureId.comments;
   img.src = pictureId.url;
   likes.textContent = pictureId.like;
   commentsCount.textContent = pictureId.comments.length.toString();

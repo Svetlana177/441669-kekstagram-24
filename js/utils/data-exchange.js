@@ -1,11 +1,11 @@
 import {bodyTag} from '../big-picture.js';
 import {isEscapeKey} from './is-key-values.js';
 
+const TIME = 4000;
 const errorTemplate = document.querySelector('#error').content;
 const errorContainer = errorTemplate.querySelector('.error');
 const successTemplate = document.querySelector('#success').content;
 const successContainer = successTemplate.querySelector('.success');
-const TIME = 4000;
 
 function onMessageEscKeydown(evt) {
   if (isEscapeKey(evt)) {
