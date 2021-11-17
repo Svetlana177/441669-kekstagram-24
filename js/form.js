@@ -4,7 +4,7 @@ import {sendData} from './api.js';
 const MAX_HASHTAG_COUNT = 5;
 const MAX_COMMENT_LENGTH = 140;
 const STEP = 25;
-const MIN_STEP_VALUE  = 25;
+const MIN_STEP_VALUE = 25;
 const MAX_STEP_VALUE = 100;
 const SLIDER_PARAMETERS = {
   'chrome': {
@@ -100,7 +100,7 @@ const clearForm = () => {
 const checkTextHashtags = () => {
   const hashtagText = textHashtag.value.toLowerCase();
   const hashtagMass = hashtagText.split(' ');
-  const tempHashtagMass = [];
+  const tempHashtags = [];
   textHashtag.setCustomValidity('');
   textHashtag.classList.remove('validation__error');
   for (let i = 0; i < hashtagMass.length; i++) {
@@ -116,11 +116,11 @@ const checkTextHashtags = () => {
     } else if (hashtagMass.length > MAX_HASHTAG_COUNT) {
       textHashtag.setCustomValidity('Нельзя указать больше 5 хэш-тегов');
       textHashtag.classList.add('validation__error');
-    } else if (tempHashtagMass.includes(hashtagMass[i])) {
+    } else if (tempHashtags.includes(hashtagMass[i])) {
       textHashtag.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды.');
       textHashtag.classList.add('validation__error');
     } else {
-      tempHashtagMass.push(hashtagMass[i]);
+      tempHashtags.push(hashtagMass[i]);
     }
     textHashtag.reportValidity();
   }
@@ -142,7 +142,7 @@ const checkComments = () => {
 scaleControlValue.value = `${currentValue}%`;
 
 const makeControlSmaller = () => {
-  if (currentValue !== MIN_STEP_VALUE ) {
+  if (currentValue !== MIN_STEP_VALUE) {
     currentValue -= STEP;
     scaleControlValue.value = `${currentValue}%`;
     imgUploadPreview.style.transform = `scale(${currentValue / 100})`;
